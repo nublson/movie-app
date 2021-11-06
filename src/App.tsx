@@ -1,9 +1,11 @@
 import Layout from "./components/Layout";
 
+import { Heading } from "./components/shared";
+
 function App() {
   return (
     <Layout>
-      <h1>Hello World</h1>
+      <Heading />
     </Layout>
   );
 }
