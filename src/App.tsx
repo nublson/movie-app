@@ -1,19 +1,17 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { Column, useTable } from "react-table";
 import styled from "styled-components";
 import Layout from "./components/Layout";
 import { Heading } from "./components/shared";
+import { IoEye } from "react-icons/io5";
 
-interface DataProps {
-  rank: number;
-  title: string;
-  year: number;
-  revenue: number;
-}
+import api from "./services/api";
+import { MovieProps } from "./types";
 
 const AppContainer = styled.div`
   width: 100%;
   height: 100%;
+  padding-bottom: 10rem;
 
   display: flex;
   flex-direction: column;
@@ -47,29 +45,36 @@ const TableHead = styled.thead`
 
 const TableBody = styled.tbody`
   width: 100%;
+`;
 
-  td {
-    height: 5rem;
-    color: #536b7a;
-    border-bottom: 1px solid #9aaebb;
-    padding: 1rem;
-  }
+const TableElement = styled.tr`
+  cursor: pointer;
+`;
+
+const TableData = styled.td`
+  height: 5rem;
+  color: #536b7a;
+  border-bottom: 1px solid #9aaebb;
+  padding: 1rem;
+`;
+
+const StyledRevenue = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10rem;
+`;
+
+const StyledIcon = styled(IoEye)`
+  cursor: pointer;
 `;
 
 function App() {
-  const data = useMemo(
-    () => [
-      {
-        rank: 1,
-        title: "Guardians of the Galaxy",
-        year: 2014,
-        revenue: 333.13,
-      },
-    ],
-    []
-  );
+  const [movies, setMovies] = useState<MovieProps[]>([]);
 
-  const columns = useMemo<Column<DataProps>[]>(
+  const data = useMemo(() => [...movies], [movies]);
+
+  const columns = useMemo<Column<MovieProps>[]>(
     () => [
       {
         Header: "Ranking",
@@ -86,6 +91,12 @@ function App() {
       {
         Header: "Revenue",
         accessor: "revenue",
+        Cell: ({ cell }) => (
+          <StyledRevenue>
+            <p>&#36;{cell.value ? cell.value : 0}</p>
+            <StyledIcon onClick={() => console.log("Click...")} />
+          </StyledRevenue>
+        ),
       },
     ],
     []
@@ -95,6 +106,17 @@ function App() {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
+
+  useEffect(() => {
+    api
+      .get("/movies")
+      .then((response) => {
+        setMovies(response.data.content);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [movies]);
 
   return (
     <Layout>
@@ -116,13 +138,20 @@ function App() {
             {rows.map((row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
+                <TableElement
+                  onClick={() => {
+                    console.log(row.original.id);
+                  }}
+                  {...row.getRowProps()}
+                >
                   {row.cells.map((cell) => {
                     return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      <TableData {...cell.getCellProps()}>
+                        {cell.render("Cell")}
+                      </TableData>
                     );
                   })}
-                </tr>
+                </TableElement>
               );
             })}
           </TableBody>
