@@ -25,10 +25,15 @@ const AppContainer = styled.div`
 const Table = styled.table`
   width: 100%;
   height: 100%;
+  border-collapse: collapse;
 `;
 
 const TableHead = styled.thead`
   width: 100%;
+
+  tr {
+    border-bottom: 1px solid #0b749b;
+  }
 
   th {
     font-size: 1rem;
@@ -36,7 +41,6 @@ const TableHead = styled.thead`
     text-transform: uppercase;
     color: #0b749b;
     text-align: left;
-    border-bottom: 1px solid #0b749b;
     padding: 0.5rem 1rem;
   }
 `;
