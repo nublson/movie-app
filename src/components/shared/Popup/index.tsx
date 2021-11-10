@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { ReactHTMLElement, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import ReactLoading from "react-loading";
 import { useApi } from "../../../hooks";
 import { MovieData } from "../../../types";
 import { Container, Content } from "./styles";
 
-interface PopupProps {
+interface PopupProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string;
 }
 
-const Popup = ({ id }: PopupProps) => {
+const Popup = ({ id, onClick, ...rest }: PopupProps) => {
   const { getMovieData } = useApi();
   const [loading, setLoading] = useState(true);
   const [movieData, setMovieData] = useState<MovieData>({} as MovieData);
@@ -26,7 +26,7 @@ const Popup = ({ id }: PopupProps) => {
   }, []);
 
   return (
-    <Container>
+    <Container {...rest}>
       <Content>
         {loading ? (
           <ReactLoading
@@ -40,7 +40,7 @@ const Popup = ({ id }: PopupProps) => {
             <div className="header">
               <h2>{movieData.title}</h2>
 
-              <div className="icon">
+              <div className="icon" onClick={onClick}>
                 <IoClose />
                 <span>close</span>
               </div>
