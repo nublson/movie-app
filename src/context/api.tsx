@@ -95,6 +95,7 @@ export const ApiProvider = ({ children }: Props) => {
   };
 
   useEffect(() => {
+    setFilter("none");
     getMovies();
   }, []);
 
