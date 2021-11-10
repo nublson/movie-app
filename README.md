@@ -16,6 +16,10 @@ yarn dev
 
 > NOTE: You will also need to create a `.env` file with the base url for the api.
 
+```env
+REACT_APP_BASE_URL=yourbaseurl
+```
+
 ---
 
 ## Available Scripts
