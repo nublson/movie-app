@@ -28,7 +28,7 @@ export const ApiProvider = ({ children }: Props) => {
       .then((response) => {
         //! ALERT
         const data = response.data.content;
-        setMovies(data.slice(0, 50));
+        setMovies(data.slice(0, 100));
       })
       .catch((e) => {
         console.log(e);
@@ -48,9 +48,21 @@ export const ApiProvider = ({ children }: Props) => {
   const filterByRevenue = () => {
     setFilter("byRevenue");
 
-    const topMovies = movies.sort((a, b) => b.revenue - a.revenue).slice(0, 10);
+    api
+      .get("/movies")
+      .then((response) => {
+        //! ALERT
+        const data: MovieProps[] = response.data.content;
 
-    setMovies(topMovies);
+        const filterMovies = data
+          .sort((a, b) => b.revenue - a.revenue)
+          .slice(0, 10);
+
+        setMovies(filterMovies);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const filterPerYear = (year: number) => {
@@ -64,8 +76,13 @@ export const ApiProvider = ({ children }: Props) => {
       })
       .then((response) => {
         //! ALERT
-        const data = response.data.content;
-        setMovies(data.slice(0, 10));
+        const data: MovieProps[] = response.data.content;
+
+        const filterMovies = data
+          .sort((a, b) => b.revenue - a.revenue)
+          .slice(0, 10);
+
+        setMovies(filterMovies);
       })
       .catch((e) => {
         console.log(e);

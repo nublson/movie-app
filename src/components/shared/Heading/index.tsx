@@ -40,7 +40,7 @@ function Heading() {
           </Button>
           <Button
             className={filter === "perYear" ? "active" : ""}
-            onClick={() => filterPerYear(2007)}
+            onClick={() => filterPerYear(2006)}
           >
             Top 10 Revenue per Year
           </Button>
