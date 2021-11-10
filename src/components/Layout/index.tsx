@@ -1,8 +1,6 @@
 import { ReactNode } from "react";
-import GlobalStyles from "../../styles/global";
 import styled from "styled-components";
-
-import { ApiProvider } from "../../context/api";
+import GlobalStyles from "../../styles/global";
 
 interface LayoutProps {
   children: ReactNode;

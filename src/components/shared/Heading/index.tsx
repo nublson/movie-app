@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
 import { IoReloadOutline } from "react-icons/io5";
 import { useApi } from "../../../hooks";
 import { Button, Container } from "./styles";
 
 function Heading() {
   const { filter, filterByRevenue, filterPerYear, resetFilter } = useApi();
+
+  const [year, setYear] = useState<number>(0);
 
   const [, setIsFilteredByRevenue] = useState(false);
   const [, setIsFilteredPerYear] = useState(false);
@@ -26,6 +29,10 @@ function Heading() {
     }
   }, [filter]);
 
+  useEffect(() => {
+    filterPerYear(year);
+  }, [year]);
+
   return (
     <Container>
       <h1>Movie ranking</h1>
@@ -38,12 +45,20 @@ function Heading() {
           >
             Top 10 Revenue
           </Button>
-          <Button
-            className={filter === "perYear" ? "active" : ""}
-            onClick={() => filterPerYear(2006)}
-          >
-            Top 10 Revenue per Year
-          </Button>
+          <DatePicker
+            showYearPicker
+            dateFormat="yyyy"
+            dateFormatCalendar=""
+            onChange={(date: Date) => setYear(date.getFullYear())}
+            customInput={
+              <Button
+                id="date"
+                className={filter === "perYear" ? "active" : ""}
+              >
+                Top 10 Revenue {!year ? "per Year" : year}
+              </Button>
+            }
+          />
         </div>
 
         {filter !== "none" && (

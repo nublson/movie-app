@@ -28,6 +28,10 @@ export const Container = styled.div`
       align-items: center;
       justify-content: flex-start;
       gap: 1.5rem;
+
+      .active {
+        background-color: #00baff;
+      }
     }
   }
 `;
@@ -41,8 +45,4 @@ export const Button = styled.button`
 
   font-size: 1.2rem;
   color: #78849e;
-
-  &.active {
-    background-color: #00baff;
-  }
 `;
