@@ -6,8 +6,8 @@ import { Button, Container } from "./styles";
 function Heading() {
   const { filter, filterByRevenue, filterPerYear, resetFilter } = useApi();
 
-  const [isFilteredByRevenue, setIsFilteredByRevenue] = useState(false);
-  const [isFilteredPerYear, setIsFilteredPerYear] = useState(false);
+  const [, setIsFilteredByRevenue] = useState(false);
+  const [, setIsFilteredPerYear] = useState(false);
 
   useEffect(() => {
     if (filter === "none") {
@@ -40,7 +40,7 @@ function Heading() {
           </Button>
           <Button
             className={filter === "perYear" ? "active" : ""}
-            onClick={() => filterPerYear()}
+            onClick={() => filterPerYear(2007)}
           >
             Top 10 Revenue per Year
           </Button>

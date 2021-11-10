@@ -11,7 +11,7 @@ interface ApiContextData {
   filter: string;
   getMovieData(movieId: string): Promise<MovieData>;
   filterByRevenue(): void;
-  filterPerYear(): void;
+  filterPerYear(year: number): void;
   resetFilter(): void;
 }
 
@@ -47,22 +47,39 @@ export const ApiProvider = ({ children }: Props) => {
 
   const filterByRevenue = () => {
     setFilter("byRevenue");
-    console.log("Filtering by revenue...");
+
+    const topMovies = movies.sort((a, b) => b.revenue - a.revenue).slice(0, 10);
+
+    setMovies(topMovies);
   };
 
-  const filterPerYear = () => {
+  const filterPerYear = (year: number) => {
     setFilter("perYear");
-    console.log("Filtering per year...");
+    api
+      .get("/movies", {
+        params: {
+          start: year,
+          end: year,
+        },
+      })
+      .then((response) => {
+        //! ALERT
+        const data = response.data.content;
+        setMovies(data.slice(0, 10));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const resetFilter = () => {
     setFilter("none");
-    console.log("Listing all movies...");
+    getMovies();
   };
 
   useEffect(() => {
     getMovies();
-  }, [movies]);
+  }, []);
 
   const data = useMemo(() => [...movies], [movies]);
 
