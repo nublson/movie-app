@@ -1,26 +1,25 @@
 import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
+import ReactLoading from "react-loading";
+import { useApi } from "../../../hooks";
 import { MovieData } from "../../../types";
 import { Container, Content } from "./styles";
-import ReactLoading from "react-loading";
-
-import api from "../../../services/api";
 
 interface PopupProps {
   id: string;
 }
 
 const Popup = ({ id }: PopupProps) => {
+  const { getMovieData } = useApi();
   const [loading, setLoading] = useState(true);
   const [movieData, setMovieData] = useState<MovieData>({} as MovieData);
 
   useEffect(() => {
-    api
-      .get(`/movies/${id}`)
-      .then((response) => {
-        setMovieData(response.data);
+    getMovieData(id)
+      .then((response) => setMovieData(response))
+      .catch((e) => {
+        console.log(e);
       })
-      .catch((e) => console.log(e))
       .finally(() => {
         setLoading(false);
       });

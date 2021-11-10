@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import GlobalStyles from "../../styles/global";
 import styled from "styled-components";
 
+import { ApiProvider } from "../../context/api";
+
 interface LayoutProps {
   children: ReactNode;
 }

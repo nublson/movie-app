@@ -1,12 +1,11 @@
-import { useMemo, useEffect, useState } from "react";
+import { useMemo } from "react";
+import { IoEye } from "react-icons/io5";
 import { Column, useTable } from "react-table";
+import Popup from "reactjs-popup";
 import styled from "styled-components";
 import Layout from "./components/Layout";
 import { Heading, PopupContainer } from "./components/shared";
-import { IoEye } from "react-icons/io5";
-import Popup from "reactjs-popup";
-
-import api from "./services/api";
+import { useApi } from "./hooks";
 import { MovieProps } from "./types";
 
 const AppContainer = styled.div`
@@ -71,9 +70,7 @@ const StyledIcon = styled(IoEye)`
 `;
 
 function App() {
-  const [movies, setMovies] = useState<MovieProps[]>([]);
-
-  const data = useMemo(() => [...movies], [movies]);
+  const { movies } = useApi();
 
   const columns = useMemo<Column<MovieProps>[]>(
     () => [
@@ -103,21 +100,10 @@ function App() {
     []
   );
 
-  const tableInstance = useTable({ columns, data });
+  const tableInstance = useTable({ columns, data: movies });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
-
-  useEffect(() => {
-    api
-      .get("/movies")
-      .then((response) => {
-        setMovies(response.data.content);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [movies]);
 
   return (
     <Layout>
@@ -140,6 +126,7 @@ function App() {
               prepareRow(row);
               return (
                 <Popup
+                  key={row.original.id}
                   trigger={
                     <TableElement {...row.getRowProps()}>
                       {row.cells.map((cell) => {
