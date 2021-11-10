@@ -2,8 +2,9 @@ import { useMemo, useEffect, useState } from "react";
 import { Column, useTable } from "react-table";
 import styled from "styled-components";
 import Layout from "./components/Layout";
-import { Heading } from "./components/shared";
+import { Heading, PopupContainer } from "./components/shared";
 import { IoEye } from "react-icons/io5";
+import Popup from "reactjs-popup";
 
 import api from "./services/api";
 import { MovieProps } from "./types";
@@ -138,20 +139,21 @@ function App() {
             {rows.map((row) => {
               prepareRow(row);
               return (
-                <TableElement
-                  onClick={() => {
-                    console.log(row.original.id);
-                  }}
-                  {...row.getRowProps()}
+                <Popup
+                  trigger={
+                    <TableElement {...row.getRowProps()}>
+                      {row.cells.map((cell) => {
+                        return (
+                          <TableData {...cell.getCellProps()}>
+                            {cell.render("Cell")}
+                          </TableData>
+                        );
+                      })}
+                    </TableElement>
+                  }
                 >
-                  {row.cells.map((cell) => {
-                    return (
-                      <TableData {...cell.getCellProps()}>
-                        {cell.render("Cell")}
-                      </TableData>
-                    );
-                  })}
-                </TableElement>
+                  <PopupContainer id={row.original.id} />
+                </Popup>
               );
             })}
           </TableBody>
