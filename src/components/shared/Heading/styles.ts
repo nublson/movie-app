@@ -21,16 +21,28 @@ export const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 1.5rem;
+    gap: 01rem;
 
-    button {
-      padding: 0.8rem 1.2rem;
-      border: 1px solid #78849e66;
-      background-color: #fff;
-      border-radius: 20px;
-
-      font-size: 1.2rem;
-      color: #78849e;
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.5rem;
     }
+  }
+`;
+
+export const Button = styled.button`
+  padding: 0.8rem 1.2rem;
+  border: 1px solid #78849e66;
+  background-color: #fff;
+  border-radius: 20px;
+  cursor: pointer;
+
+  font-size: 1.2rem;
+  color: #78849e;
+
+  &.active {
+    background-color: #00baff;
   }
 `;

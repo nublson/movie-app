@@ -1,13 +1,60 @@
-import { Container } from "./styles";
+import { useEffect, useState } from "react";
+import { IoReloadOutline } from "react-icons/io5";
+import { useApi } from "../../../hooks";
+import { Button, Container } from "./styles";
 
 function Heading() {
+  const { filter, filterByRevenue, filterPerYear, resetFilter } = useApi();
+
+  const [isFilteredByRevenue, setIsFilteredByRevenue] = useState(false);
+  const [isFilteredPerYear, setIsFilteredPerYear] = useState(false);
+
+  useEffect(() => {
+    if (filter === "none") {
+      setIsFilteredByRevenue(false);
+      setIsFilteredPerYear(false);
+    }
+
+    if (filter === "byRevenue") {
+      setIsFilteredByRevenue(true);
+      setIsFilteredPerYear(false);
+    }
+
+    if (filter === "perYear") {
+      setIsFilteredByRevenue(false);
+      setIsFilteredPerYear(true);
+    }
+  }, [filter]);
+
   return (
     <Container>
       <h1>Movie ranking</h1>
 
       <div className="filters">
-        <button>Top 10 Revenue</button>
-        <button>Top 10 Revenue per Year</button>
+        <div className="buttons">
+          <Button
+            className={filter === "byRevenue" ? "active" : ""}
+            onClick={() => filterByRevenue()}
+          >
+            Top 10 Revenue
+          </Button>
+          <Button
+            className={filter === "perYear" ? "active" : ""}
+            onClick={() => filterPerYear()}
+          >
+            Top 10 Revenue per Year
+          </Button>
+        </div>
+
+        {filter !== "none" && (
+          <IoReloadOutline
+            size={24}
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              resetFilter();
+            }}
+          />
+        )}
       </div>
     </Container>
   );
